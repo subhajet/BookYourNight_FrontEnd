@@ -1,0 +1,10 @@
+.categories{
+    padding: 6rem 2rem 1rem 2rem;
+    color: (--text-color-primary);
+    position: fixed;
+    z-index: 1;
+    width: 100vw;
+}
+.gap-large {
+    gap: 2rem;
+}
