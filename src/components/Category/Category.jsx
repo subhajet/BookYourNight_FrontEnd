@@ -1,21 +1,20 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useCategory } from "../../context";
 
 import "./Category.css";
 
 export const Category = () => {
   const [categories, setCategories] = useState([]);
   const [numberofCategoryToshow, setNumberofCategoryToshow] = useState(0);
+  const { hotelCategory, setHotelCategory} = useCategory();
 
   const handleShowMoreRightClick = () => {
     setNumberofCategoryToshow((pre) => pre + 10);
   };
   const handleShowMoreLeftClick = () => {
-    handleShowMoreLeftClick((pre) => pre - 10);
+    setNumberofCategoryToshow((prev) => (prev - 10 >= 0 ? prev - 10 : 0));
   };
-
-
-
   useEffect(() => {
     (async () => {
       try {
@@ -32,19 +31,36 @@ export const Category = () => {
       }
     })();
   }, [numberofCategoryToshow]);
+
+  const  handleCategoryClick = (category) => {
+    setHotelCategory(category)
+  };
+  
   return (
     <section className="categories d-flex align-center gap-large cursor-pointer">
-      <button onClick={handleShowMoreLeftClick}>
-        <span class="material-symbols-outlined">chevron_left</span>
-      </button>
+    {
+      numberofCategoryToshow >= 10 && (
+       <button className="button btn-category btn-left fiexed cursor-pointer" onClick={handleShowMoreLeftClick}>
+       <span class="material-symbols-outlined">chevron_left</span>
+     </button>
+      )
+   }
       {categories &&
-        categories.map(({ category, index }) => (
-            <span key={category.id || category.name || index}>{category} </span>
+        categories.map(({ category, _id }) => (
+            <span className={`${category === hotelCategory ? "border-bottom" : ""}`} key={_id} onClick={() => handleCategoryClick(category)}>{category} </span>
         ))}
-      <button onClick={handleShowMoreRightClick}>
+        {
+          numberofCategoryToshow -10 <  categories.length && (
+            <button className="button btn-category btn-right fiexed cursor-pointer" onClick={handleShowMoreRightClick}>
         <span class="material-symbols-outlined">chevron_right</span>
-      </button>
+      </button>  
+          )
+        }
+      
     </section>
   );
 };
 
+// categories.map(({ category, index }) => (
+//   <span key={category.id || category.name || index}>{category} </span>
+// ))}
