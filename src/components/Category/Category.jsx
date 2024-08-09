@@ -40,7 +40,7 @@ export const Category = () => {
     <section className="categories d-flex align-center gap-large cursor-pointer">
     {
       numberofCategoryToshow >= 10 && (
-       <button className="button btn-category btn-left fiexed cursor-pointer" onClick={handleShowMoreLeftClick}>
+       <button className="button btn-category btn-left fixed cursor-pointer" onClick={handleShowMoreLeftClick}>
        <span class="material-symbols-outlined">chevron_left</span>
      </button>
       )
@@ -52,7 +52,7 @@ export const Category = () => {
         {
           numberofCategoryToshow -10 <  categories.length && (
             <button className="button btn-category btn-right fiexed cursor-pointer" onClick={handleShowMoreRightClick}>
-        <span class="material-symbols-outlined">chevron_right</span>
+        <span className="material-symbols-outlined">chevron_right</span>
       </button>  
           )
         }
@@ -61,6 +61,3 @@ export const Category = () => {
   );
 };
 
-// categories.map(({ category, index }) => (
-//   <span key={category.id || category.name || index}>{category} </span>
-// ))}

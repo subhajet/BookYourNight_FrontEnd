@@ -8,7 +8,6 @@ const CategoryContext = createContext(initialValue)
 
 const CategoryProvider = ({ children }) => {
     const [hotelCategory, setHotelCategory] = useState(initialValue);
-    // console.log(initialValue);
     return ( 
         <CategoryContext.Provider value={{ hotelCategory, setHotelCategory}}>
         {children}
