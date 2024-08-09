@@ -1,0 +1,12 @@
+.main{
+    padding: 10rem 3rem 2rem 2rem;
+}
+
+.gap-larger{
+    gap:2rem
+}
+
+.alert-text{
+    margin: 2rem 0;
+    text-align: center;
+}

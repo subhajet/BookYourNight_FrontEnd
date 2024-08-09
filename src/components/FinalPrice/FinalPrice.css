@@ -1,0 +1,45 @@
+.price-details-container {
+    align-self: flex-start;
+    background-color: var(--background-color);
+    padding: 1.5rem;
+    width: 25rem;
+    margin-left: auto;
+    margin-top: 2rem;
+
+}
+
+.guests {
+    border: 1px solid var(--container-border-color);
+    padding: 4px 0;
+    text-align: left;
+}
+
+.gutter-sm {
+    padding: 8px 1rem;
+}
+.btn-reserve {
+    width: 100%;
+    padding: 1rem;
+}
+
+.price-distribution {
+    padding-top: 1rem;
+    display: flex; /* Use flexbox for alignment */
+    flex-direction: column; /* Stack children vertically */
+}
+
+.final-price {
+    display: flex; /* Use flexbox for alignment within the row */
+    align-items: center; /* Align items vertically */
+    justify-content: space-between; /* Space items evenly */
+    padding: 10px; /* Add padding around each row */
+}
+
+.final-price:nth-last-child(2) {
+    border-bottom: 1px solid var(--container-border-color)
+}
+
+            
+.guests-count-input {
+    outline: none;
+}
