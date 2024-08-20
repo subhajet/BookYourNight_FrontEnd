@@ -1,19 +1,40 @@
-import {useEffect, useState } from "react";
-import axios from "axios"
+import { useEffect, useState } from "react";
+import axios from "axios";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Navbar, HotelCard, Category, SearchStayWithDate } from "../../components";
-import "./Home.css"
-import { useCategory, useDate} from "../../context";
-
-
+import {
+  Navbar,
+  HotelCard,
+  Category,
+  SearchStayWithDate,
+  Filter,
+} from "../../components";
+import "./Home.css";
+import { useCategory, useDate, useFilter } from "../../context";
+import {
+  getHotelsByPrice,
+  getHotelsByRoomsAndBeds,
+  getHotelsByPropertyType,
+  getHotelsByRatings,
+  getHoteByCancalation
+} from "../../utils";
 
 export const Home = () => {
   const [hasMore, setHasMore] = useState(true);
-  const [testData, setTestData] = useState([]); 
-  const [currentIndex, setCurrentIndex] = useState(16);  
+  const [testData, setTestData] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(16);
   const [hotels, setHotels] = useState([]);
   const { hotelCategory } = useCategory();
-  const {isSearchModalOpen} = useDate();
+  const { isSearchModalOpen } = useDate();
+  const {
+    isFilterModalOpen,
+    priceRange,
+    noOfBathrooms,
+    noOfBedrooms,
+    noOfBeds,
+    propertyType,
+    travelRating,
+    isCancalable,
+  } = useFilter();
 
   useEffect(() => {
     (async () => {
@@ -21,13 +42,13 @@ export const Home = () => {
         const { data } = await axios.get(
           `https://bookyournightbacked.onrender.com/api/hotels?category=${hotelCategory}`
         );
-        setTestData(data); 
-        setHotels(data ? data.slice(0, 16) : []);     
+        setTestData(data);
+        setHotels(data ? data.slice(0, 16) : []);
       } catch (err) {
         console.log(err);
       }
     })();
-  }, [hotelCategory]); 
+  }, [hotelCategory]);
 
   const fetchMoreData = () => {
     if (hotels.length >= testData.length) {
@@ -36,34 +57,55 @@ export const Home = () => {
     }
     setTimeout(() => {
       if (hotels && hotels.length > 0) {
-        setHotels(hotels.concat(testData.slice(currentIndex, currentIndex + 16)));
-        setCurrentIndex(prev => prev + 16);
+        setHotels(
+          hotels.concat(testData.slice(currentIndex, currentIndex + 16))
+        );
+        setCurrentIndex((prev) => prev + 16);
       } else {
         setHotels([]);
       }
     }, 1000);
   };
 
+  const filterHotelByPrice = getHotelsByPrice(testData, priceRange);
+  const filterHotelByBedsAndRooms = getHotelsByRoomsAndBeds(
+    filterHotelByPrice,
+    noOfBathrooms,
+    noOfBedrooms,
+    noOfBeds
+  );
+  const filterHotelsByPropertyType = getHotelsByPropertyType(
+    filterHotelByBedsAndRooms,
+    propertyType
+  );
+
+  const filerHotelsByRatings = getHotelsByRatings(filterHotelsByPropertyType, travelRating)
+
+  const filterHotelsByCancalation = getHoteByCancalation(filerHotelsByRatings, isCancalable)
+
   return (
-    <div className="realtive">
-      <Navbar/>
-      <Category/>
-      {hotels && hotels.length > 0 ? (
+    <div className="relative">
+      <Navbar />
+      <Category />
+      {filterHotelByPrice.length > 0 ? (
         <InfiniteScroll
-          dataLength={hotels.length}
+          dataLength={filterHotelByPrice.length}
           next={fetchMoreData}
           hasMore={hasMore}
-          loader={hotels.length > 0 && <h3 className="alert-text"> Loading...</h3>}
+          loader={<h3 className="alert-text">Loading...</h3>}
           endMessage={<p className="alert-text">You have seen it all</p>}
         >
           <main className="main d-flex align-center wrap gap-larger">
-            {hotels.map((hotel) => <HotelCard key={hotel._id} hotel={hotel} />)}
+            {filterHotelsByCancalation.map((hotel) => (
+              <HotelCard key={hotel._id} hotel={hotel} />
+            ))}
           </main>
         </InfiniteScroll>
-      ) : null} 
-      {
-        isSearchModalOpen && <SearchStayWithDate/>
-      }
+      ) : (
+        <p>No hotels found within the selected price range.</p>
+      )}
+      {isSearchModalOpen && <SearchStayWithDate />}
+      {isFilterModalOpen && <Filter />}
     </div>
   );
 };
