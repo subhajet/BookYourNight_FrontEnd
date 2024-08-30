@@ -7,8 +7,8 @@ let isNumberValid, isPasswordValid;
 
 export const AuthLogin = () => {
   const { authDispatch, number, password } = useAuth();
-  console.log({password, number});
 
+  console.log({password, number});
 
   const handleNumberChange = (event) => {
     isNumberValid = validateNumber(event.target.value);
@@ -55,6 +55,25 @@ export const AuthLogin = () => {
       type:"SHOW_AUTH_MODAL"
     })
   };
+  
+  const handleTestCredentialsClick = async () => {
+    const {accessToken, username} = await loginHandler
+    (6370098765,"Abcd@123")
+    authDispatch({
+      type:"SET_ACCESS_TOKEN",
+      payload:accessToken
+    })
+    authDispatch({
+      type:"SET_USER_NAME",
+      payload:username
+    })
+  authDispatch({
+    type:"CLEAR_USER_DATA",
+  })
+  authDispatch({
+    type:"SHOW_AUTH_MODAL"
+  }) 
+}
 
   return (
     <div className="auth-container">
@@ -90,7 +109,7 @@ export const AuthLogin = () => {
         </div>
       </form>
       <div className="ctc">
-        <button className="button btn-outline-primary cursor-pointer">
+        <button className="button btn-outline-primary cursor-pointer" onClick={handleTestCredentialsClick}>
           Login with Test Credential
         </button>
       </div>
