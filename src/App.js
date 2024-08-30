@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
-import { Home, SearchResult, SingleHotel } from './Pages';
+import { Home, SearchResult, SingleHotel, Wishlist } from './Pages';
 import './App.css';
 import { Filter } from './components/Filters/Filter';
 
@@ -11,6 +11,7 @@ function App() {
 
     <Route path='/hotels/:address' element={<SearchResult />}></Route>
     <Route path="/filter" element={<Filter/>}></Route>
+    <Route path='/wishlist' element={<Wishlist/>} />
     </Routes>
 
   );
